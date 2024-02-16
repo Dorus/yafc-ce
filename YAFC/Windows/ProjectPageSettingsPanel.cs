@@ -5,13 +5,14 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using SDL2;
 using YAFC.Model;
 using YAFC.UI;
 
 namespace YAFC {
 
-    public class ProjectPageSettingsPanel : PseudoScreen {
+    public partial class ProjectPageSettingsPanel : PseudoScreen {
         private static readonly ProjectPageSettingsPanel Instance = new ProjectPageSettingsPanel();
 
         private ProjectPage editingPage;
@@ -185,6 +186,12 @@ namespace YAFC {
             }
         }
 
+        [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+        [JsonSerializable(typeof(IEnumerable<ExportRow>))]
+        private partial class ProjectJsonContext : JsonSerializerContext
+        {
+        }
+        
         private class ExportMaterial {
             public string Name { get; }
             public double CountPerSecond { get; }
@@ -195,11 +202,13 @@ namespace YAFC {
             }
         }
 
-        private static void ExportPage(ProjectPage page) {
+        private static void ExportPage(ProjectPage page)
+        {
             using MemoryStream stream = new MemoryStream();
             using Utf8JsonWriter writer = new Utf8JsonWriter(stream);
-            JsonSerializer.Serialize(stream, ((ProductionTable)page.content).recipes.Select(rr => new ExportRow(rr)), new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
-            _ = SDL.SDL_SetClipboardText(Encoding.UTF8.GetString(stream.GetBuffer()));
+            var value = ((ProductionTable)page.content).recipes.Select(rr => new ExportRow(rr));
+            JsonSerializer.Serialize(stream, value, ProjectJsonContext.Default.IEnumerableExportRow);
+            SDL.SDL_SetClipboardText(Encoding.UTF8.GetString(stream.GetBuffer()));
         }
 
         public static void LoadProjectPageFromClipboard() {

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using YAFC.Model;
 
 namespace YAFC {
@@ -12,6 +13,13 @@ namespace YAFC {
         private static readonly string fileName;
 
         public static readonly string autosaveFilename;
+
+        [JsonSourceGenerationOptions(WriteIndented = true, IgnoreReadOnlyProperties = true)]
+        [JsonSerializable(typeof(Preferences))]
+        public partial class PreferenceJsonContext : JsonSerializerContext
+        {
+
+        }
 
         static Preferences() {
             appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -27,7 +35,7 @@ namespace YAFC {
             fileName = Path.Combine(appDataFolder, "yafc.config");
             if (File.Exists(fileName)) {
                 try {
-                    Instance = JsonSerializer.Deserialize<Preferences>(File.ReadAllBytes(fileName));
+                    Instance = JsonSerializer.Deserialize(File.ReadAllBytes(fileName), PreferenceJsonContext.Default.Preferences);
                     return;
                 }
                 catch (Exception ex) {
@@ -38,7 +46,7 @@ namespace YAFC {
         }
 
         public void Save() {
-            byte[] data = JsonSerializer.SerializeToUtf8Bytes(this, JsonUtils.DefaultOptions);
+            byte[] data = JsonSerializer.SerializeToUtf8Bytes(this, JsonUtils.DefaultOptions, PreferenceJsonContext.Default.Preferences);
             File.WriteAllBytes(fileName, data);
         }
         public ProjectDefinition[] recentProjects { get; set; } = Array.Empty<ProjectDefinition>();

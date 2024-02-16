@@ -5,13 +5,14 @@ using System.IO;
 using System.Net.Http;
 using System.Numerics;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using SDL2;
 using YAFC.Model;
 using YAFC.UI;
 
 namespace YAFC {
-    public class MainScreen : WindowMain, IKeyboardFocus, IProgress<(string, string)> {
+    public partial class MainScreen : WindowMain, IKeyboardFocus, IProgress<(string, string)> {
         ///<summary>Unique ID for the Summary page</summary>
         public static readonly Guid SummaryGuid = Guid.Parse("9bdea333-4be2-4be3-b708-b36a64672a40");
         public static MainScreen Instance { get; private set; }
@@ -480,6 +481,11 @@ namespace YAFC {
             return true;
         }
 
+        [JsonSerializable(typeof(GithubReleaseInfo))]
+        private partial class GithubReleaseContext : JsonSerializerContext
+        {
+        }
+
         private class GithubReleaseInfo {
             public string html_url { get; set; }
             public string tag_name { get; set; }
@@ -489,7 +495,7 @@ namespace YAFC {
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Add("User-Agent", "YAFC-CE (check for updates)");
                 string result = await client.GetStringAsync(new Uri("https://api.github.com/repos/have-fun-was-taken/yafc-ce/releases/latest"));
-                var release = JsonSerializer.Deserialize<GithubReleaseInfo>(result);
+                var release = JsonSerializer.Deserialize(result, GithubReleaseContext.Default.GithubReleaseInfo);
                 string version = release.tag_name.StartsWith("v", StringComparison.Ordinal) ? release.tag_name[1..] : release.tag_name;
                 if (new Version(version) > YafcLib.version) {
                     var (_, answer) = await MessageBox.Show("New version availible!", "There is a new version availible: " + release.tag_name, "Visit release page", "Close");
