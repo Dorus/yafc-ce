@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Http;
 using System.Numerics;
@@ -294,7 +295,7 @@ namespace YAFC {
             }
         }
 
-        public ProjectPage AddProjectPage(string name, FactorioObject icon, Type contentType, bool setActive, bool initNew) {
+        public ProjectPage AddProjectPage(string name, FactorioObject icon, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] Type contentType, bool setActive, bool initNew) {
             ProjectPage page = new ProjectPage(project, contentType) { name = name, icon = icon };
             if (initNew) {
                 page.content.InitNew();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
@@ -30,7 +31,7 @@ namespace YAFC.Model {
         }
     }
 
-    internal abstract class ValueSerializer<T> {
+    internal abstract class ValueSerializer<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] T> {
         public static readonly ValueSerializer<T> Default = CreateValueSerializer() as ValueSerializer<T>;
 
         private static object CreateValueSerializer() {
@@ -105,7 +106,7 @@ namespace YAFC.Model {
         }
     }
 
-    internal class ModelObjectSerializer<T> : ValueSerializer<T> where T : ModelObject {
+    internal class ModelObjectSerializer<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] T> : ValueSerializer<T> where T : ModelObject {
         public override T ReadFromJson(ref Utf8JsonReader reader, DeserializationContext context, object owner) {
             return SerializationMap<T>.DeserializeFromJson((ModelObject)owner, ref reader, context);
         }
@@ -123,7 +124,7 @@ namespace YAFC.Model {
         }
     }
 
-    internal class NullableSerializer<T> : ValueSerializer<T?> where T : struct {
+    internal class NullableSerializer<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] T> : ValueSerializer<T?> where T : struct {
         private static readonly ValueSerializer<T> baseSerializer = ValueSerializer<T>.Default;
         public override T? ReadFromJson(ref Utf8JsonReader reader, DeserializationContext context, object owner) {
             if (reader.TokenType == JsonTokenType.Null) {
@@ -410,7 +411,7 @@ namespace YAFC.Model {
         }
     }
 
-    internal class PlainClassesSerializer<T> : ValueSerializer<T> where T : class {
+    internal class PlainClassesSerializer<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] T> : ValueSerializer<T> where T : class {
         private static readonly SerializationMap builder = SerializationMap.GetSerializationMap(typeof(T));
         public override T ReadFromJson(ref Utf8JsonReader reader, DeserializationContext context, object owner) {
             return SerializationMap<T>.DeserializeFromJson(null, ref reader, context);
