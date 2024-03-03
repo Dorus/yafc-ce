@@ -42,7 +42,7 @@ namespace YAFC.Model {
         public abstract void PopulateFromJson(object target, ref Utf8JsonReader reader, DeserializationContext context);
     }
 
-    internal static class SerializationMap<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T> where T : class {
+    internal static class SerializationMap<T> where T : ModelObject {
         private static readonly Type parentType;
         private static readonly ConstructorInfo constructor;
         private static readonly PropertySerializer<T>[] properties;

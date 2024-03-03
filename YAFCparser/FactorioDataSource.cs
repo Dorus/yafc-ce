@@ -132,10 +132,9 @@ namespace YAFC.Parser {
                 progress.Report(("Initializing", "Loading mod list"));
                 string modListPath = Path.Combine(modPath, "mod-list.json");
                 Dictionary<string, Version> versionSpecifiers = new Dictionary<string, Version>();
-                if (File.Exists(modListPath))
-                {
+                if (File.Exists(modListPath)) {
                     var mods = JsonSerializer.Deserialize(File.ReadAllText(modListPath), ModListJsonContext.Default.ModList);
-                    allMods = mods.mods.Where(x => x.enabled).Select(x => x.name).ToDictionary(x => x, x => (ModInfo) null);
+                    allMods = mods.mods.Where(x => x.enabled).Select(x => x.name).ToDictionary(x => x, x => (ModInfo)null);
                     versionSpecifiers = mods.mods.Where(x => x.enabled && !string.IsNullOrEmpty(x.version)).ToDictionary(x => x.name, x => Version.Parse(x.version));
                 }
                 else {
@@ -301,10 +300,9 @@ namespace YAFC.Parser {
 
         [JsonSerializable(typeof(ModList))]
         [JsonSerializable(typeof(ModInfo))]
-        internal partial class ModListJsonContext : JsonSerializerContext
-        {
+        internal partial class ModListJsonContext : JsonSerializerContext {
         }
-        
+
         internal class ModList {
             public ModEntry[] mods { get; set; }
         }

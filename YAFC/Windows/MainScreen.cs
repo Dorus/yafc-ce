@@ -295,7 +295,7 @@ namespace YAFC {
             }
         }
 
-        public ProjectPage AddProjectPage(string name, FactorioObject icon, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] Type contentType, bool setActive, bool initNew) {
+        public ProjectPage AddProjectPage(string name, FactorioObject icon, Type contentType, bool setActive, bool initNew) {
             ProjectPage page = new ProjectPage(project, contentType) { name = name, icon = icon };
             if (initNew) {
                 page.content.InitNew();
@@ -483,8 +483,7 @@ namespace YAFC {
         }
 
         [JsonSerializable(typeof(GithubReleaseInfo))]
-        private partial class GithubReleaseContext : JsonSerializerContext
-        {
+        private partial class GithubReleaseContext : JsonSerializerContext {
         }
 
         private class GithubReleaseInfo {

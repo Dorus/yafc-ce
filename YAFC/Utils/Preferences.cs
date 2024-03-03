@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 using YAFC.Model;
 
 namespace YAFC {
-    public class Preferences {
+    public partial class Preferences {
         public static readonly Preferences Instance;
         public static readonly string appDataFolder;
         private static readonly string fileName;
@@ -16,8 +16,8 @@ namespace YAFC {
 
         [JsonSourceGenerationOptions(WriteIndented = true, IgnoreReadOnlyProperties = true)]
         [JsonSerializable(typeof(Preferences))]
-        public partial class PreferenceJsonContext : JsonSerializerContext
-        {
+        [JsonSerializable(typeof(ProjectDefinition))]
+        public partial class PreferenceJsonContext : JsonSerializerContext {
 
         }
 
@@ -46,7 +46,7 @@ namespace YAFC {
         }
 
         public void Save() {
-            byte[] data = JsonSerializer.SerializeToUtf8Bytes(this, JsonUtils.DefaultOptions, PreferenceJsonContext.Default.Preferences);
+            byte[] data = JsonSerializer.SerializeToUtf8Bytes(this, PreferenceJsonContext.Default.Preferences);
             File.WriteAllBytes(fileName, data);
         }
         public ProjectDefinition[] recentProjects { get; set; } = Array.Empty<ProjectDefinition>();
@@ -61,7 +61,7 @@ namespace YAFC {
         }
     }
 
-    public class ProjectDefinition {
+    public partial class ProjectDefinition {
         public string path { get; set; }
         public string dataPath { get; set; }
         public string modsPath { get; set; }

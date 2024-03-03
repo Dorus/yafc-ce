@@ -21,7 +21,7 @@ namespace YAFC.Model {
         private uint actualVersion;
         public event Action<bool> contentChanged;
 
-        public ProjectPage(Project project, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] Type contentType, bool canDelete = true, Guid guid = default) : base(project) {
+        public ProjectPage(Project project, Type contentType, bool canDelete = true, Guid guid = default) : base(project) {
             this.guid = guid == default ? Guid.NewGuid() : guid;
             actualVersion = project.projectVersion;
             this.contentType = contentType;

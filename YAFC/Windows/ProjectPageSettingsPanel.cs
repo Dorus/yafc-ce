@@ -188,10 +188,9 @@ namespace YAFC {
 
         [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
         [JsonSerializable(typeof(IEnumerable<ExportRow>))]
-        private partial class ProjectJsonContext : JsonSerializerContext
-        {
+        private partial class ProjectJsonContext : JsonSerializerContext {
         }
-        
+
         private class ExportMaterial {
             public string Name { get; }
             public double CountPerSecond { get; }
@@ -202,8 +201,7 @@ namespace YAFC {
             }
         }
 
-        private static void ExportPage(ProjectPage page)
-        {
+        private static void ExportPage(ProjectPage page) {
             using MemoryStream stream = new MemoryStream();
             using Utf8JsonWriter writer = new Utf8JsonWriter(stream);
             var value = ((ProductionTable)page.content).recipes.Select(rr => new ExportRow(rr));
