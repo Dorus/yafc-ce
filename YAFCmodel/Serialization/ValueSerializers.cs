@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
@@ -411,7 +410,7 @@ namespace YAFC.Model {
         }
     }
 
-    internal class PlainClassesSerializer<T> : ValueSerializer<T> where T : ModelObject {
+    internal class PlainClassesSerializer<T> : ValueSerializer<T> where T : class {
         private static readonly SerializationMap builder = SerializationMap.GetSerializationMap(typeof(T));
         public override T ReadFromJson(ref Utf8JsonReader reader, DeserializationContext context, object owner) {
             return SerializationMap<T>.DeserializeFromJson(null, ref reader, context);
