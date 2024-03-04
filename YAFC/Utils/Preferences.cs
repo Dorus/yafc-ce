@@ -35,6 +35,7 @@ namespace YAFC {
             fileName = Path.Combine(appDataFolder, "yafc.config");
             if (File.Exists(fileName)) {
                 try {
+                    // todo add JsonUtils.DefaultOptions back
                     Instance = JsonSerializer.Deserialize(File.ReadAllBytes(fileName), PreferenceJsonContext.Default.Preferences);
                     return;
                 }

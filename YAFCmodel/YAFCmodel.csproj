@@ -17,5 +17,9 @@
   <ItemGroup>
     <ProjectReference Include="..\YAFCui\YAFCui.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <EmbeddedResource Include="ILLink.Descriptors.xml">
+      <LogicalName>ILLink.Descriptors.xml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>
