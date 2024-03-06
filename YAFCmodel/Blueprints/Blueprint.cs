@@ -8,8 +8,13 @@ using YAFC.Model;
 using YAFC.UI;
 
 namespace YAFC.Blueprints {
+
     [Serializable]
-    public class BlueprintString {
+    public partial class BlueprintString {
+        [JsonSourceGenerationOptions(DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonSerializable(typeof(BlueprintString))]
+        internal partial class BlueprintStringJsonContext : JsonSerializerContext { }
+
         public Blueprint blueprint { get; set; } = new Blueprint();
         private static readonly byte[] header = { 0x78, 0xDA };
 
@@ -17,8 +22,7 @@ namespace YAFC.Blueprints {
             if (InputSystem.Instance.control) {
                 return ToJson();
             }
-
-            byte[] sourceBytes = JsonSerializer.SerializeToUtf8Bytes(this, new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
+            byte[] sourceBytes = JsonSerializer.SerializeToUtf8Bytes(this, BlueprintStringJsonContext.Default.BlueprintString);
             using MemoryStream memory = new MemoryStream();
             memory.Write(header);
             using (DeflateStream compress = new DeflateStream(memory, CompressionLevel.Optimal, true)) {
@@ -42,7 +46,7 @@ namespace YAFC.Blueprints {
         }
 
         public string ToJson() {
-            byte[] sourceBytes = JsonSerializer.SerializeToUtf8Bytes(this, new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
+            byte[] sourceBytes = JsonSerializer.SerializeToUtf8Bytes(this, BlueprintStringJsonContext.Default.BlueprintString);
             using MemoryStream memory = new MemoryStream(sourceBytes);
             using StreamReader reader = new StreamReader(memory);
             return reader.ReadToEnd();

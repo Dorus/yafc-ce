@@ -181,16 +181,6 @@ namespace YAFC.Model {
         public bool hierarchyEnabled { get; internal set; }
         public int tag { get; set; }
 
-        [Obsolete("Deprecated", true)]
-        public Item module {
-            set {
-                if (value != null) {
-                    modules = new ModuleTemplate(this);
-                    modules.list.Add(new RecipeRowCustomModule(modules, value));
-                }
-            }
-        }
-
         private ModuleTemplate _modules;
 
         public ModuleTemplate modules {

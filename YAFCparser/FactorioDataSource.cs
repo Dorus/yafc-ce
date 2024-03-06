@@ -4,11 +4,16 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using YAFC.Model;
 
 namespace YAFC.Parser {
-    public static class FactorioDataSource {
+    public static partial class FactorioDataSource {
+        [JsonSerializable(typeof(ModList))]
+        [JsonSerializable(typeof(ModInfo))]
+        internal partial class ModListJsonContext : JsonSerializerContext { }
+
         internal static Dictionary<string, ModInfo> allMods = new Dictionary<string, ModInfo>();
         public static readonly Version defaultFactorioVersion = new Version(1, 1);
         private static byte[] ReadAllBytes(this Stream stream, int length) {
@@ -132,7 +137,7 @@ namespace YAFC.Parser {
                 string modListPath = Path.Combine(modPath, "mod-list.json");
                 Dictionary<string, Version> versionSpecifiers = new Dictionary<string, Version>();
                 if (File.Exists(modListPath)) {
-                    var mods = JsonSerializer.Deserialize<ModList>(File.ReadAllText(modListPath));
+                    var mods = JsonSerializer.Deserialize(File.ReadAllText(modListPath), ModListJsonContext.Default.ModList);
                     allMods = mods.mods.Where(x => x.enabled).Select(x => x.name).ToDictionary(x => x, x => (ModInfo)null);
                     versionSpecifiers = mods.mods.Where(x => x.enabled && !string.IsNullOrEmpty(x.version)).ToDictionary(x => x.name, x => Version.Parse(x.version));
                 }
@@ -317,7 +322,7 @@ namespace YAFC.Parser {
             public string folder;
 
             public static ModInfo FromJson(ReadOnlySpan<byte> json) {
-                var info = JsonSerializer.Deserialize<ModInfo>(json.CleanupBom());
+                var info = JsonSerializer.Deserialize(json.CleanupBom(), ModListJsonContext.Default.ModInfo);
                 _ = Version.TryParse(info.version, out var parsedV);
                 info.parsedVersion = parsedV ?? new Version();
                 _ = Version.TryParse(info.factorio_version, out parsedV);

@@ -16,15 +16,6 @@ namespace YAFC.Model {
         public Item beaconModule { get; set; }
         public int beaconsPerBuilding { get; set; } = 8;
 
-        [Obsolete("Moved to project settings", true)]
-        public int miningProductivity {
-            set {
-                if (GetRoot() is Project rootProject && rootProject.settings.miningProductivity < value * 0.01f) {
-                    rootProject.settings.miningProductivity = value * 0.01f;
-                }
-            }
-        }
-
         public void AutoFillBeacons(RecipeParameters recipeParams, Recipe recipe, EntityCrafter entity, Goods fuel, ref ModuleEffects effects, ref RecipeParameters.UsedModule used) {
             if (!recipe.flags.HasFlags(RecipeFlags.UsesMiningProductivity) && beacon != null && beaconModule != null) {
                 effects.AddModules(beaconModule.module, beaconsPerBuilding * beacon.beaconEfficiency * beacon.moduleSlots, entity.allowedEffects);

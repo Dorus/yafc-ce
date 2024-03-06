@@ -3,10 +3,16 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using YAFC.Model;
 
 namespace YAFC {
-    public class Preferences {
+    public partial class Preferences {
+        //[JsonSourceGenerationOptions(WriteIndented = true, IgnoreReadOnlyProperties = true)]
+        //[JsonSerializable(typeof(Preferences))]
+        //[JsonSerializable(typeof(ProjectDefinition))]
+        //public partial class PreferenceJsonContext : JsonSerializerContext { }
+
         public static readonly Preferences Instance;
         public static readonly string appDataFolder;
         private static readonly string fileName;
@@ -27,7 +33,11 @@ namespace YAFC {
             fileName = Path.Combine(appDataFolder, "yafc.config");
             if (File.Exists(fileName)) {
                 try {
-                    Instance = JsonSerializer.Deserialize<Preferences>(File.ReadAllBytes(fileName));
+                    var options = new JsonSerializerOptions(JsonUtils.DefaultOptions) {
+                        //TypeInfoResolver = PreferenceJsonContext.Default // need net 8 to support this
+                    };
+                    Instance = (Preferences)JsonSerializer.Deserialize(File.ReadAllBytes(fileName), typeof(Preferences), options);
+                    //Instance = JsonSerializer.Deserialize(File.ReadAllBytes(fileName), PreferenceJsonContext.Default.Preferences);
                     return;
                 }
                 catch (Exception ex) {
@@ -38,7 +48,11 @@ namespace YAFC {
         }
 
         public void Save() {
-            byte[] data = JsonSerializer.SerializeToUtf8Bytes(this, JsonUtils.DefaultOptions);
+            var options = new JsonSerializerOptions(JsonUtils.DefaultOptions) {
+                //TypeInfoResolver = PreferenceJsonContext.Default // need net 8 to support this
+            };
+            byte[] data = JsonSerializer.SerializeToUtf8Bytes(this, typeof(Preferences), options);
+            //byte[] data = JsonSerializer.SerializeToUtf8Bytes(this, PreferenceJsonContext.Default.Preferences);
             File.WriteAllBytes(fileName, data);
         }
         public ProjectDefinition[] recentProjects { get; set; } = Array.Empty<ProjectDefinition>();
@@ -53,7 +67,7 @@ namespace YAFC {
         }
     }
 
-    public class ProjectDefinition {
+    public partial class ProjectDefinition {
         public string path { get; set; }
         public string dataPath { get; set; }
         public string modsPath { get; set; }

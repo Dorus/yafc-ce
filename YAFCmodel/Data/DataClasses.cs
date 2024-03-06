@@ -12,7 +12,7 @@ namespace YAFC.Model {
         float amount { get; }
     }
 
-    internal enum FactorioObjectSortOrder {
+    public enum FactorioObjectSortOrder {
         SpecialGoods,
         Items,
         Fluids,
