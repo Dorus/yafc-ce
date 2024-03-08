@@ -35,8 +35,13 @@ namespace YAFC {
             fileName = Path.Combine(appDataFolder, "yafc.config");
             if (File.Exists(fileName)) {
                 try {
-                    // todo add JsonUtils.DefaultOptions back
-                    Instance = JsonSerializer.Deserialize(File.ReadAllBytes(fileName), PreferenceJsonContext.Default.Preferences);
+                    var options = new JsonSerializerOptions(JsonUtils.DefaultOptions) {
+                        TypeInfoResolver = PreferenceJsonContext.Default
+                    };
+                    // We can ignore IL2026 because we set the TypeInfoResolver above.
+#pragma warning disable IL2026 // Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code
+                    Instance = JsonSerializer.Deserialize(File.ReadAllBytes(fileName), typeof(Preferences), options) as Preferences;
+#pragma warning restore IL2026 // Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code
                     return;
                 }
                 catch (Exception ex) {
@@ -47,7 +52,13 @@ namespace YAFC {
         }
 
         public void Save() {
-            byte[] data = JsonSerializer.SerializeToUtf8Bytes(this, PreferenceJsonContext.Default.Preferences);
+            var options = new JsonSerializerOptions(JsonUtils.DefaultOptions) {
+                TypeInfoResolver = PreferenceJsonContext.Default
+            };
+            // We can ignore IL2026 because we set the TypeInfoResolver above.
+#pragma warning disable IL2026 // Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code
+            byte[] data = JsonSerializer.SerializeToUtf8Bytes(this, typeof(Preferences), options);
+#pragma warning restore IL2026 // Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code
             File.WriteAllBytes(fileName, data);
         }
         public ProjectDefinition[] recentProjects { get; set; } = Array.Empty<ProjectDefinition>();
