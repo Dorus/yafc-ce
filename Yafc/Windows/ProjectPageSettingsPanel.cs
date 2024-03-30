@@ -8,8 +8,9 @@ using System.Text.Json;
 using SDL2;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
 
-namespace Yafc {
+namespace Yafc.Windows {
 
     public class ProjectPageSettingsPanel : PseudoScreen {
         private static readonly ProjectPageSettingsPanel Instance = new ProjectPageSettingsPanel();
@@ -198,7 +199,7 @@ namespace Yafc {
         private static void ExportPage(ProjectPage page) {
             using MemoryStream stream = new MemoryStream();
             using Utf8JsonWriter writer = new Utf8JsonWriter(stream);
-            JsonSerializer.Serialize(stream, ((ProductionTable)page.content).recipes.Select(rr => new ExportRow(rr)), new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+            JsonSerializer.Serialize(stream, ((ProductionTableModel)page.content).recipes.Select(rr => new ExportRow(rr)), new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
             _ = SDL.SDL_SetClipboardText(Encoding.UTF8.GetString(stream.GetBuffer()));
         }
 

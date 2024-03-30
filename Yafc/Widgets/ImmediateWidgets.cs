@@ -4,8 +4,9 @@ using System.Numerics;
 using SDL2;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Windows;
 
-namespace Yafc {
+namespace Yafc.Widgets {
     public enum MilestoneDisplay {
         Normal,
         Contained,

@@ -2,8 +2,9 @@
 using System.Numerics;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Windows;
 
-namespace Yafc {
+namespace Yafc.Widgets {
     public class MainScreenTabBar {
         private readonly MainScreen screen;
         private readonly ImGui tabs;

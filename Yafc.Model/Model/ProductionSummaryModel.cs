@@ -122,7 +122,7 @@ namespace Yafc.Model {
                 subgroup.Solve(flow, multiplier);
             }
             else {
-                if (page?.page?.content is not ProductionTable spage) {
+                if (page?.page?.content is not ProductionTableModel spage) {
                     return;
                 }
 
@@ -157,15 +157,15 @@ namespace Yafc.Model {
         }
     }
 
-    public class ProductionSummaryColumn : ModelObject<ProductionSummary> {
-        public ProductionSummaryColumn(ProductionSummary owner, Goods goods) : base(owner) {
+    public class ProductionSummaryColumn : ModelObject<ProductionSummaryModel> {
+        public ProductionSummaryColumn(ProductionSummaryModel owner, Goods goods) : base(owner) {
             this.goods = goods ?? throw new ArgumentNullException(nameof(goods), "Object does not exist");
         }
         public Goods goods { get; }
     }
 
-    public class ProductionSummary : ProjectPageContents, IComparer<(Goods goods, float amount)> {
-        public ProductionSummary(ModelObject page) : base(page) {
+    public class ProductionSummaryModel : ProjectPageContents, IComparer<(Goods goods, float amount)> {
+        public ProductionSummaryModel(ModelObject page) : base(page) {
             group = new ProductionSummaryGroup(this);
         }
         public ProductionSummaryGroup group { get; }

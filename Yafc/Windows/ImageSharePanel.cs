@@ -2,8 +2,10 @@
 using System.Runtime.InteropServices;
 using SDL2;
 using Yafc.Ui;
+using Yafc.Utils;
+using Yafc.Widgets;
 
-namespace Yafc {
+namespace Yafc.Windows {
     public class ImageSharePanel : PseudoScreen {
         private static readonly ImageSharePanel Instance = new ImageSharePanel();
         private MemoryDrawingSurface surface;
@@ -35,7 +37,7 @@ namespace Yafc {
 
             if (gui.BuildButton("Save to temp folder and open")) {
                 surface.SavePng(TempImageFile);
-                Ui.VisitLink("file:///" + TempImageFile);
+                Ui.Ui.VisitLink("file:///" + TempImageFile);
             }
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && gui.BuildButton(copied ? "Copied to clipboard" : "Copy to clipboard (Ctrl+" + ImGuiUtils.ScanToString(SDL.SDL_Scancode.SDL_SCANCODE_C) + ")", active: !copied)) {

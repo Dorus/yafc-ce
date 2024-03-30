@@ -48,7 +48,7 @@ namespace Yafc.Model {
                 processingStack.Enqueue(goal.item);
             }
 
-            await Ui.ExitMainThread();
+            await Ui.Ui.ExitMainThread();
             var objective = solver.Objective();
             objective.SetMinimization();
             processingStack.Enqueue(null); // depth marker;
@@ -236,7 +236,7 @@ nope:;
                 }).ToArray());
             }
             solver.Dispose();
-            await Ui.EnterMainThread();
+            await Ui.Ui.EnterMainThread();
 
             this.tiers = tiers.ToArray();
             return null;

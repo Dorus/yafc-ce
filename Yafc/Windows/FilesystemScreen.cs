@@ -5,7 +5,7 @@ using System.Linq;
 using System.Numerics;
 using Yafc.Ui;
 
-namespace Yafc {
+namespace Yafc.Windows {
     public class FilesystemScreen : TaskWindow<string> {
         private enum EntryType { Drive, ParentDirectory, Directory, CreateDirectory, File }
         public enum Mode {

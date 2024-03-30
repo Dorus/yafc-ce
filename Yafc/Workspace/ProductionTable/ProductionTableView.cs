@@ -6,14 +6,16 @@ using SDL2;
 using Yafc.Blueprints;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
+using Yafc.Windows;
 
-namespace Yafc {
-    public class ProductionTableView : ProjectPageView<ProductionTable> {
-        private readonly FlatHierarchy<RecipeRow, ProductionTable> flatHierarchyBuilder;
+namespace Yafc.Workspace.ProductionTable {
+    public class ProductionTableView : ProjectPageView<ProductionTableModel> {
+        private readonly FlatHierarchy<RecipeRow, ProductionTableModel> flatHierarchyBuilder;
 
         public ProductionTableView() {
             DataGrid<RecipeRow> grid = new DataGrid<RecipeRow>(new RecipePadColumn(this), new RecipeColumn(this), new EntityColumn(this), new IngredientsColumn(this), new ProductsColumn(this), new ModulesColumn(this));
-            flatHierarchyBuilder = new FlatHierarchy<RecipeRow, ProductionTable>(grid, BuildSummary, "This is a nested group. You can drag&drop recipes here. Nested groups can have their own linked materials.");
+            flatHierarchyBuilder = new FlatHierarchy<RecipeRow, ProductionTableModel>(grid, BuildSummary, "This is a nested group. You can drag&drop recipes here. Nested groups can have their own linked materials.");
         }
 
         private abstract class ProductionTableDataColumn : TextDataColumn<RecipeRow> {
@@ -77,7 +79,7 @@ namespace Yafc {
                     }
                 }
 
-                static void ToggleAll(bool state, ProductionTable table) {
+                static void ToggleAll(bool state, ProductionTableModel table) {
                     foreach (var recipe in table.recipes.Where(r => r.subgroup != null)) {
                         recipe.subgroup.RecordChange().expanded = state;
                         ToggleAll(state, recipe.subgroup);
@@ -109,7 +111,7 @@ namespace Yafc {
                         view.DrawRecipeTagSelect(imgui, recipe);
 
                         if (recipe.subgroup == null && imgui.BuildButton("Create nested table") && imgui.CloseDropdown()) {
-                            recipe.RecordUndo().subgroup = new ProductionTable(recipe);
+                            recipe.RecordUndo().subgroup = new ProductionTableModel(recipe);
                         }
 
                         if (recipe.subgroup != null && imgui.BuildButton("Add nested desired product") && imgui.CloseDropdown()) {
@@ -157,7 +159,7 @@ namespace Yafc {
                 gui.BuildText(recipe.recipe.locName, wrap: true);
             }
 
-            private void RemoveZeroRecipes(ProductionTable productionTable) {
+            private void RemoveZeroRecipes(ProductionTableModel productionTable) {
                 _ = productionTable.RecordUndo().recipes.RemoveAll(x => x.subgroup == null && x.recipesPerSecond == 0);
                 foreach (var recipe in productionTable.recipes) {
                     if (recipe.subgroup != null) {
@@ -580,12 +582,12 @@ goodsHaveNoProduction:;
 
         public override void CreateModelDropdown(ImGui gui, Type type, Project project) {
             if (gui.BuildContextMenuButton("Create production sheet") && gui.CloseDropdown()) {
-                ProjectPageSettingsPanel.Show(null, (name, icon) => MainScreen.Instance.AddProjectPage(name, icon, typeof(ProductionTable), true, true));
+                ProjectPageSettingsPanel.Show(null, (name, icon) => MainScreen.Instance.AddProjectPage(name, icon, typeof(ProductionTableModel), true, true));
             }
         }
 
         private static readonly IComparer<Goods> DefaultVariantOrdering = new DataUtils.FactorioObjectComparer<Goods>((x, y) => (y.ApproximateFlow() / MathF.Abs(y.Cost())).CompareTo(x.ApproximateFlow() / MathF.Abs(x.Cost())));
-        private RecipeRow AddRecipe(ProductionTable table, Recipe recipe) {
+        private RecipeRow AddRecipe(ProductionTableModel table, Recipe recipe) {
             RecipeRow recipeRow = new RecipeRow(table, recipe);
             table.RecordUndo().recipes.Add(recipeRow);
             recipeRow.entity = recipe.crafters.AutoSelect(DataUtils.FavouriteCrafter);
@@ -609,7 +611,7 @@ goodsHaveNoProduction:;
             Fuel
         }
 
-        private void CreateLink(ProductionTable table, Goods goods) {
+        private void CreateLink(ProductionTableModel table, Goods goods) {
             if (table.linkMap.ContainsKey(goods)) {
                 return;
             }
@@ -627,14 +629,14 @@ goodsHaveNoProduction:;
         }
 
         private void CreateNewProductionTable(Goods goods, float amount) {
-            var page = MainScreen.Instance.AddProjectPage(goods.locName, goods, typeof(ProductionTable), true, false);
-            ProductionTable content = page.content as ProductionTable;
+            var page = MainScreen.Instance.AddProjectPage(goods.locName, goods, typeof(ProductionTableModel), true, false);
+            ProductionTableModel content = page.content as ProductionTableModel;
             ProductionLink link = new ProductionLink(content, goods) { amount = amount > 0 ? amount : 1 };
             content.links.Add(link);
             content.RebuildLinkMap();
         }
 
-        private void OpenProductDropdown(ImGui targetGui, Rect rect, Goods goods, float amount, ProductionLink link, ProductDropdownType type, RecipeRow recipe, ProductionTable context, Goods[] variants = null) {
+        private void OpenProductDropdown(ImGui targetGui, Rect rect, Goods goods, float amount, ProductionLink link, ProductDropdownType type, RecipeRow recipe, ProductionTableModel context, Goods[] variants = null) {
             if (InputSystem.Instance.shift) {
                 Project.current.preferences.SetSourceResource(goods, !goods.IsSourceResource());
                 targetGui.Rebuild();
@@ -837,15 +839,15 @@ goodsHaveNoProduction:;
             base.Rebuild(visualOnly);
         }
 
-        private void BuildGoodsIcon(ImGui gui, Goods goods, ProductionLink link, float amount, ProductDropdownType dropdownType, RecipeRow recipe, ProductionTable context, Goods[] variants = null) {
-            bool linkIsError = link != null && ((link.flags & (ProductionLink.Flags.HasProductionAndConsumption | ProductionLink.Flags.LinkRecursiveNotMatched | ProductionLink.Flags.ChildNotMatched)) != ProductionLink.Flags.HasProductionAndConsumption);
+        private void BuildGoodsIcon(ImGui gui, Goods goods, ProductionLink link, float amount, ProductDropdownType dropdownType, RecipeRow recipe, ProductionTableModel context, Goods[] variants = null) {
+            bool linkIsError = link != null && (link.flags & (ProductionLink.Flags.HasProductionAndConsumption | ProductionLink.Flags.LinkRecursiveNotMatched | ProductionLink.Flags.ChildNotMatched)) != ProductionLink.Flags.HasProductionAndConsumption;
             bool linkIsForeign = link != null && link.owner != context;
             if (gui.BuildFactorioObjectWithAmount(goods, amount, goods?.flowUnitOfMeasure ?? UnitOfMeasure.None, link != null ? linkIsError ? SchemeColor.Error : linkIsForeign ? SchemeColor.Secondary : SchemeColor.Primary : goods.IsSourceResource() ? SchemeColor.Green : SchemeColor.None)) {
                 OpenProductDropdown(gui, gui.lastRect, goods, amount, link, dropdownType, recipe, context, variants);
             }
         }
 
-        private void BuildTableProducts(ImGui gui, ProductionTable table, ProductionTable context, ref ImGuiUtils.InlineGridBuilder grid) {
+        private void BuildTableProducts(ImGui gui, ProductionTableModel table, ProductionTableModel context, ref ImGuiUtils.InlineGridBuilder grid) {
             var flow = table.flow;
             int firstProduct = Array.BinarySearch(flow, new ProductionTableFlow(Database.voidEnergy, 1e-9f, null), model);
             if (firstProduct < 0) {
@@ -863,7 +865,7 @@ goodsHaveNoProduction:;
             }
         }
 
-        private void FillRecipeList(ProductionTable table, List<RecipeRow> list) {
+        private void FillRecipeList(ProductionTableModel table, List<RecipeRow> list) {
             foreach (var recipe in table.recipes) {
                 list.Add(recipe);
                 if (recipe.subgroup != null) {
@@ -872,7 +874,7 @@ goodsHaveNoProduction:;
             }
         }
 
-        private void FillLinkList(ProductionTable table, List<ProductionLink> list) {
+        private void FillLinkList(ProductionTableModel table, List<ProductionLink> list) {
             list.AddRange(table.links);
             foreach (var recipe in table.recipes) {
                 if (recipe.subgroup != null) {
@@ -954,7 +956,7 @@ goodsHaveNoProduction:;
 
                 gui.BuildText(text);
                 if (capacity > 1) {
-                    float withBeltSwingTime = inserter.inserterSwingTime + (2f * (capacity - 1.5f) / belt.beltItemsPerSecond);
+                    float withBeltSwingTime = inserter.inserterSwingTime + 2f * (capacity - 1.5f) / belt.beltItemsPerSecond;
                     float inserterToBelt = amount * withBeltSwingTime / capacity;
                     click |= gui.BuildFactorioObjectButton(belt);
                     gui.AllocateSpacing(-1.5f);
@@ -973,7 +975,7 @@ goodsHaveNoProduction:;
             }
         }
 
-        private void BuildTableIngredients(ImGui gui, ProductionTable table, ProductionTable context, ref ImGuiUtils.InlineGridBuilder grid) {
+        private void BuildTableIngredients(ImGui gui, ProductionTableModel table, ProductionTableModel context, ref ImGuiUtils.InlineGridBuilder grid) {
             foreach (var flow in table.flow) {
                 if (flow.amount >= 0f) {
                     break;
@@ -1008,7 +1010,7 @@ goodsHaveNoProduction:;
             flatHierarchyBuilder.BuildHeader(gui);
         }
 
-        protected override void BuildPageTooltip(ImGui gui, ProductionTable contents) {
+        protected override void BuildPageTooltip(ImGui gui, ProductionTableModel contents) {
             foreach (var link in contents.links) {
                 if (link.amount != 0f) {
                     using (gui.EnterRow()) {
@@ -1084,7 +1086,7 @@ goodsHaveNoProduction:;
             gui.SetMinWidth(flatHierarchyBuilder.width);
         }
 
-        private void AddDesiredProductAtLevel(ProductionTable table) {
+        private void AddDesiredProductAtLevel(ProductionTableModel table) {
             SelectObjectPanel.Select(Database.goods.all, "Add desired product", product => {
                 if (table.linkMap.TryGetValue(product, out var existing)) {
                     if (existing.amount != 0) {
@@ -1099,7 +1101,7 @@ goodsHaveNoProduction:;
             });
         }
 
-        private void BuildSummary(ImGui gui, ProductionTable table) {
+        private void BuildSummary(ImGui gui, ProductionTableModel table) {
             bool isRoot = table == model;
             if (!isRoot && !table.containsDesiredProducts) {
                 return;

@@ -1,8 +1,9 @@
 ﻿using System;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
 
-namespace Yafc {
+namespace Yafc.Windows {
     public class PreferencesScreen : PseudoScreen {
         private static readonly PreferencesScreen Instance = new PreferencesScreen();
 

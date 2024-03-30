@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
 
-namespace Yafc {
+namespace Yafc.Workspace {
     public class SummaryView : ProjectPageView<Summary> {
         private class SummaryScrollArea : ScrollArea {
             private static readonly float DefaultHeight = 10;
@@ -24,7 +25,7 @@ namespace Yafc {
             }
 
             public override void BuildElement(ImGui gui, ProjectPage page) {
-                if (page?.contentType != typeof(ProductionTable)) {
+                if (page?.contentType != typeof(ProductionTableModel)) {
                     return;
                 }
 
@@ -50,11 +51,11 @@ namespace Yafc {
             }
 
             public override void BuildElement(ImGui gui, ProjectPage page) {
-                if (page?.contentType != typeof(ProductionTable)) {
+                if (page?.contentType != typeof(ProductionTableModel)) {
                     return;
                 }
 
-                ProductionTable table = page.content as ProductionTable;
+                ProductionTableModel table = page.content as ProductionTableModel;
                 using var grid = gui.EnterInlineGrid(ElementWidth, ElementSpacing);
                 foreach (KeyValuePair<string, GoodDetails> goodInfo in view.allGoods) {
                     if (!view.searchQuery.Match(goodInfo.Key)) {
@@ -187,7 +188,7 @@ namespace Yafc {
         private void BuildScrollArea(ImGui gui) {
             foreach (Guid displayPage in project.displayPages) {
                 ProjectPage page = project.FindPage(displayPage);
-                if (page?.contentType != typeof(ProductionTable)) {
+                if (page?.contentType != typeof(ProductionTableModel)) {
                     continue;
                 }
 
@@ -203,7 +204,7 @@ namespace Yafc {
             allGoods.Clear();
             foreach (Guid displayPage in project.displayPages) {
                 ProjectPage page = project.FindPage(displayPage);
-                ProductionTable content = page?.content as ProductionTable;
+                ProductionTableModel content = page?.content as ProductionTableModel;
                 if (content == null) {
                     continue;
                 }

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
 
-namespace Yafc {
+namespace Yafc.Workspace.ProductionTable {
     public class FlatHierarchy<TRow, TGroup> where TRow : ModelObject<TGroup>, IGroupedElement<TGroup> where TGroup : ModelObject<ModelObject>, IElementGroup<TRow> {
         private readonly DataGrid<TRow> grid;
         private readonly List<TRow> flatRecipes = new List<TRow>();

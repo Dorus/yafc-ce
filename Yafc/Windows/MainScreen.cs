@@ -9,8 +9,13 @@ using System.Threading.Tasks;
 using SDL2;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Utils;
+using Yafc.Widgets;
+using Yafc.Workspace;
+using Yafc.Workspace.ProductionSummary;
+using Yafc.Workspace.ProductionTable;
 
-namespace Yafc {
+namespace Yafc.Windows {
     public class MainScreen : WindowMain, IKeyboardFocus, IProgress<(string, string)> {
         ///<summary>Unique ID for the Summary page</summary>
         public static readonly Guid SummaryGuid = Guid.Parse("9bdea333-4be2-4be3-b708-b36a64672a40");
@@ -44,9 +49,9 @@ namespace Yafc {
 
         public MainScreen(int display, Project project) : base(default) {
             summaryView = new SummaryView();
-            RegisterPageView<ProductionTable>(new ProductionTableView());
+            RegisterPageView<ProductionTableModel>(new ProductionTableView());
             RegisterPageView<AutoPlanner>(new AutoPlannerView());
-            RegisterPageView<ProductionSummary>(new ProductionSummaryView());
+            RegisterPageView<ProductionSummaryModel>(new ProductionSummaryView());
             RegisterPageView<Summary>(summaryView);
             searchGui = new ImGui(BuildSearch, new Padding(1f)) { boxShadow = RectangleBorder.Thin, boxColor = SchemeColor.Background };
             Instance = this;
@@ -69,7 +74,7 @@ namespace Yafc {
             }
 
             if (project.pages.Count == 0) {
-                ProjectPage firstPage = new ProjectPage(project, typeof(ProductionTable));
+                ProjectPage firstPage = new ProjectPage(project, typeof(ProductionTableModel));
                 project.pages.Add(firstPage);
             }
 
@@ -494,7 +499,7 @@ namespace Yafc {
                 if (new Version(version) > YafcLib.version) {
                     var (_, answer) = await MessageBox.Show("New version available!", "There is a new version available: " + release.tag_name, "Visit release page", "Close");
                     if (answer) {
-                        Ui.VisitLink(release.html_url);
+                        Ui.Ui.VisitLink(release.html_url);
                     }
 
                     return;
@@ -504,7 +509,7 @@ namespace Yafc {
             catch (Exception) {
                 MessageBox.Show((hasAnswer, answer) => {
                     if (answer) {
-                        Ui.VisitLink(AboutScreen.Github + "/releases");
+                        Ui.Ui.VisitLink(AboutScreen.Github + "/releases");
                     }
                 }, "Network error", "There were an error while checking versions.", "Open releases url", "Close");
             }
@@ -517,7 +522,7 @@ namespace Yafc {
 
         public bool ShowPseudoScreen(PseudoScreen screen) {
             if (topScreen == null) {
-                Ui.DispatchInMainThread(x => fadeDrawer.CreateDownscaledImage(), null);
+                Ui.Ui.DispatchInMainThread(x => fadeDrawer.CreateDownscaledImage(), null);
             }
             project.undo.Suspend();
             screen.Rebuild();

@@ -169,7 +169,7 @@ namespace Yafc.Model {
         bool visible { get; }
     }
 
-    public class RecipeRow : ModelObject<ProductionTable>, IModuleFiller, IGroupedElement<ProductionTable> {
+    public class RecipeRow : ModelObject<ProductionTableModel>, IModuleFiller, IGroupedElement<ProductionTableModel> {
         public Recipe recipe { get; }
         // Variable parameters
         public EntityCrafter entity { get; set; }
@@ -205,9 +205,9 @@ namespace Yafc.Model {
             }
         }
 
-        public ProductionTable subgroup { get; set; }
+        public ProductionTableModel subgroup { get; set; }
         public HashSet<FactorioObject> variants { get; } = new HashSet<FactorioObject>();
-        [SkipSerialization] public ProductionTable linkRoot => subgroup ?? owner;
+        [SkipSerialization] public ProductionTableModel linkRoot => subgroup ?? owner;
 
         // Computed variables
         public RecipeParameters parameters { get; } = new RecipeParameters();
@@ -234,7 +234,7 @@ namespace Yafc.Model {
         public float buildingCount => (float)recipesPerSecond * parameters.recipeTime;
         public bool visible { get; internal set; } = true;
 
-        public RecipeRow(ProductionTable owner, Recipe recipe) : base(owner) {
+        public RecipeRow(ProductionTableModel owner, Recipe recipe) : base(owner) {
             this.recipe = recipe ?? throw new ArgumentNullException(nameof(recipe), "Recipe does not exist");
             links = new RecipeLinks {
                 ingredients = new ProductionLink[recipe.ingredients.Length],
@@ -247,7 +247,7 @@ namespace Yafc.Model {
             owner.ThisChanged(visualOnly);
         }
 
-        public void SetOwner(ProductionTable parent) {
+        public void SetOwner(ProductionTableModel parent) {
             owner = parent;
         }
 
@@ -309,7 +309,7 @@ namespace Yafc.Model {
         AllowOverConsumption,
     }
 
-    public class ProductionLink : ModelObject<ProductionTable> {
+    public class ProductionLink : ModelObject<ProductionTableModel> {
         [Flags]
         public enum Flags {
             LinkNotMatched = 1 << 0,
@@ -333,7 +333,7 @@ namespace Yafc.Model {
         internal int solverIndex;
         public float dualValue { get; internal set; }
 
-        public ProductionLink(ProductionTable group, Goods goods) : base(group) {
+        public ProductionLink(ProductionTableModel group, Goods goods) : base(group) {
             this.goods = goods ?? throw new ArgumentNullException(nameof(goods), "Linked product does not exist");
         }
     }

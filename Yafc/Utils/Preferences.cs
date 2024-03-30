@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text.Json;
 using Yafc.Model;
 
-namespace Yafc {
+namespace Yafc.Utils {
     public class Preferences {
         public static readonly Preferences Instance;
         public static readonly string appDataFolder;

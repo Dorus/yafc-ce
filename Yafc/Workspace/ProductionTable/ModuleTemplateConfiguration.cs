@@ -1,8 +1,10 @@
 ﻿using System.Numerics;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
+using Yafc.Windows;
 
-namespace Yafc {
+namespace Yafc.Workspace.ProductionTable {
     public class ModuleTemplateConfiguration : PseudoScreen {
         private static readonly ModuleTemplateConfiguration Instance = new ModuleTemplateConfiguration();
         private readonly VirtualScrollList<ProjectModuleTemplate> templateList;

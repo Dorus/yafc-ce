@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
+using Yafc.Windows;
 
-namespace Yafc {
+namespace Yafc.Workspace {
     public class AutoPlannerView : ProjectPageView<AutoPlanner> {
         private AutoPlannerRecipe selectedRecipe;
         public override void SetModel(ProjectPage page) {

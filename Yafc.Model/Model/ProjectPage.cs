@@ -88,11 +88,11 @@ namespace Yafc.Model {
             currentSolvingVersion = actualVersion;
             try {
                 string error = await content.Solve(this);
-                await Ui.EnterMainThread();
+                await Ui.Ui.EnterMainThread();
                 return error;
             }
             finally {
-                await Ui.EnterMainThread();
+                await Ui.Ui.EnterMainThread();
                 lastSolvedVersion = currentSolvingVersion;
                 currentSolvingVersion = 0;
             }

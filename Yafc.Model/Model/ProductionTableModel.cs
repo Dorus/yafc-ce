@@ -18,7 +18,7 @@ namespace Yafc.Model {
         }
     }
 
-    public class ProductionTable : ProjectPageContents, IComparer<ProductionTableFlow>, IElementGroup<RecipeRow> {
+    public class ProductionTableModel : ProjectPageContents, IComparer<ProductionTableFlow>, IElementGroup<RecipeRow> {
         [SkipSerialization] public Dictionary<Goods, ProductionLink> linkMap { get; } = new Dictionary<Goods, ProductionLink>();
         List<RecipeRow> IElementGroup<RecipeRow>.elements => recipes;
         [NoUndo]
@@ -29,7 +29,7 @@ namespace Yafc.Model {
         public ModuleFillerParameters modules { get; set; }
         public bool containsDesiredProducts { get; private set; }
 
-        public ProductionTable(ModelObject owner) : base(owner) {
+        public ProductionTableModel(ModelObject owner) : base(owner) {
             if (owner is ProjectPage) {
                 modules = new ModuleFillerParameters(this);
             }
@@ -330,7 +330,7 @@ match:
                 }
             }
 
-            await Ui.ExitMainThread();
+            await Ui.Ui.ExitMainThread();
             for (int i = 0; i < allRecipes.Count; i++) {
                 objective.SetCoefficient(vars[i], allRecipes[i].recipe.RecipeBaseCost());
             }
@@ -364,7 +364,7 @@ match:
                 result = solver.Solve();
 
                 Console.WriteLine("Solver finished with result " + result);
-                await Ui.EnterMainThread();
+                await Ui.Ui.EnterMainThread();
 
                 if (result is Solver.ResultStatus.OPTIMAL or Solver.ResultStatus.FEASIBLE) {
                     List<ProductionLink> linkList = new List<ProductionLink>();

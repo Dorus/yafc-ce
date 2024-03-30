@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Yafc.Model;
 using Yafc.Ui;
 
-namespace Yafc {
+namespace Yafc.Widgets {
     public class ObjectTooltip : Tooltip {
         public static readonly Padding contentPadding = new Padding(1f, 0.25f);
 

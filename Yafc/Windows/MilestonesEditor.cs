@@ -1,8 +1,9 @@
 ﻿using System.Numerics;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
 
-namespace Yafc {
+namespace Yafc.Windows {
     public class MilestonesEditor : PseudoScreen {
         private static readonly MilestonesEditor Instance = new MilestonesEditor();
         private readonly VirtualScrollList<FactorioObject> milestoneList;

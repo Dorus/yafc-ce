@@ -2,6 +2,8 @@
 using System.IO;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Utils;
+using Yafc.Windows;
 
 namespace Yafc {
     public static class Program {

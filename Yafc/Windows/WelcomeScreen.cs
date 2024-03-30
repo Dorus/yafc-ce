@@ -7,8 +7,9 @@ using SDL2;
 using Yafc.Model;
 using Yafc.Parser;
 using Yafc.Ui;
+using Yafc.Utils;
 
-namespace Yafc {
+namespace Yafc.Windows {
     public class WelcomeScreen : WindowUtility, IProgress<(string, string)> {
         private bool loading;
         private string currentLoad1, currentLoad2;

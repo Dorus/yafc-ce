@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
 
-namespace Yafc {
+namespace Yafc.Windows {
     public class NeverEnoughItemsPanel : PseudoScreen, IComparer<NeverEnoughItemsPanel.RecipeEntry> {
         private static readonly NeverEnoughItemsPanel Instance = new NeverEnoughItemsPanel();
         private Goods current;

@@ -1,6 +1,6 @@
 ﻿using Yafc.Ui;
 
-namespace Yafc {
+namespace Yafc.Windows {
     public class AboutScreen : WindowUtility {
         public const string Github = "https://github.com/have-fun-was-taken/yafc-ce";
 
@@ -72,7 +72,7 @@ namespace Yafc {
 
         private void BuildLink(ImGui gui, string url, string text = null) {
             if (gui.BuildLink(text ?? url)) {
-                Ui.VisitLink(url);
+                Ui.Ui.VisitLink(url);
             }
         }
     }

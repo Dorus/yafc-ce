@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Yafc.Ui;
+using Yafc.Widgets;
 
-namespace Yafc {
+namespace Yafc.Windows {
     public class WizardPanel : PseudoScreen {
         public static readonly WizardPanel Instance = new WizardPanel();
 

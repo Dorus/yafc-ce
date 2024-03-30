@@ -2,8 +2,10 @@
 using System.Linq;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
+using Yafc.Windows;
 
-namespace Yafc {
+namespace Yafc.Workspace.ProductionTable {
     public class ModuleFillerParametersScreen : PseudoScreen {
         private static readonly ModuleFillerParametersScreen Instance = new ModuleFillerParametersScreen();
         private ModuleFillerParameters modules;

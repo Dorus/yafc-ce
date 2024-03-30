@@ -3,8 +3,9 @@ using System.Linq;
 using SDL2;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
 
-namespace Yafc {
+namespace Yafc.Windows {
     public class DependencyExplorer : PseudoScreen {
         private static readonly DependencyExplorer Instance = new DependencyExplorer();
 

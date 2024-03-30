@@ -23,7 +23,7 @@ namespace Yafc {
             Project.currentYafcVersion = version;
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                 NativeLibrary.SetDllImportResolver(typeof(SDL).Assembly, DllResolver);
-                NativeLibrary.SetDllImportResolver(typeof(Ui).Assembly, DllResolver);
+                NativeLibrary.SetDllImportResolver(typeof(Ui.Ui).Assembly, DllResolver);
                 NativeLibrary.SetDllImportResolver(typeof(FactorioDataSource).Assembly, DllResolver);
             }
         }

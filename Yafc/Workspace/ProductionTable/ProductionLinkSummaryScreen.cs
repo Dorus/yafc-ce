@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
+using Yafc.Windows;
 
-namespace Yafc {
+namespace Yafc.Workspace.ProductionTable {
     public class ProductionLinkSummaryScreen : PseudoScreen, IComparer<(RecipeRow row, float flow)> {
         private static readonly ProductionLinkSummaryScreen Instance = new ProductionLinkSummaryScreen();
         private ProductionLink link;

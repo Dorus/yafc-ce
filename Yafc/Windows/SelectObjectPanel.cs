@@ -4,8 +4,9 @@ using System.Numerics;
 using SDL2;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
 
-namespace Yafc {
+namespace Yafc.Windows {
     public class SelectObjectPanel : PseudoScreen<FactorioObject> {
         private static readonly SelectObjectPanel Instance = new SelectObjectPanel();
         private readonly SearchableList<FactorioObject> list;

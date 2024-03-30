@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Yafc.Ui;
 
-namespace Yafc {
+namespace Yafc.Widgets {
     public class SearchableList<TData> : VirtualScrollList<TData> {
         public SearchableList(float height, Vector2 elementSize, Drawer drawer, Filter filter, IComparer<TData> comparer = null) : base(height, elementSize, drawer) {
             filterFunc = filter;

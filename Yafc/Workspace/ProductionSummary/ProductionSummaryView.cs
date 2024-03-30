@@ -4,9 +4,12 @@ using System.Linq;
 using System.Numerics;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
+using Yafc.Windows;
+using Yafc.Workspace.ProductionTable;
 
-namespace Yafc {
-    public class ProductionSummaryView : ProjectPageView<ProductionSummary> {
+namespace Yafc.Workspace.ProductionSummary {
+    public class ProductionSummaryView : ProjectPageView<ProductionSummaryModel> {
         private readonly DataGrid<ProductionSummaryEntry> grid;
         private readonly FlatHierarchy<ProductionSummaryEntry, ProductionSummaryGroup> flatHierarchy;
         private Goods filteredGoods;
@@ -61,7 +64,7 @@ namespace Yafc {
             private void BuildButtons(ImGui gui, float size, ProductionSummaryGroup group) {
                 using (gui.EnterRow()) {
                     if (gui.BuildButton(Icon.Plus, SchemeColor.Primary, SchemeColor.PrimaryAlt, SchemeColor.PrimaryAlt, size)) {
-                        pagesDropdown.data = Project.current.pages.Where(x => x.content is ProductionTable).ToArray();
+                        pagesDropdown.data = Project.current.pages.Where(x => x.content is ProductionTableModel).ToArray();
                         pagesDropdown.filter = productionTableSearchQuery = new SearchQuery();
                         selectedGroup = group;
                         gui.ShowDropDown(AddProductionTableDropdown);
@@ -325,11 +328,11 @@ namespace Yafc {
 
         public override void CreateModelDropdown(ImGui gui, Type type, Project project) {
             if (gui.BuildContextMenuButton("Create production summary (Preview)") && gui.CloseDropdown()) {
-                ProjectPageSettingsPanel.Show(null, (name, icon) => MainScreen.Instance.AddProjectPage(name, icon, typeof(ProductionSummary), true, true));
+                ProjectPageSettingsPanel.Show(null, (name, icon) => MainScreen.Instance.AddProjectPage(name, icon, typeof(ProductionSummaryModel), true, true));
             }
         }
 
-        protected override void BuildPageTooltip(ImGui gui, ProductionSummary contents) {
+        protected override void BuildPageTooltip(ImGui gui, ProductionSummaryModel contents) {
 
         }
     }

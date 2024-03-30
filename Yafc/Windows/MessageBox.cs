@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Yafc.Ui;
+using Yafc.Widgets;
 
-namespace Yafc {
+namespace Yafc.Windows {
     public class MessageBox : PseudoScreen<bool> {
         public MessageBox() : base(30f) { }
         private static readonly MessageBox Instance = new MessageBox();

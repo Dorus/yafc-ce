@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
+using Yafc.Windows;
 
-namespace Yafc {
+namespace Yafc.Workspace.ProductionTable {
     public class ModuleCustomisationScreen : PseudoScreen {
         private static readonly ModuleCustomisationScreen Instance = new ModuleCustomisationScreen();
 

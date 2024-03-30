@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Yafc.Ui;
 
-namespace Yafc {
+namespace Yafc.Utils {
     public static class WindowsClipboard {
         [DllImport("user32.dll")] private static extern bool OpenClipboard(IntPtr handle);
         [DllImport("user32.dll")] private static extern bool EmptyClipboard();

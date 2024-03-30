@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Numerics;
 using SDL2;
+using Yafc.Ui;
 
-namespace Yafc.Ui {
+namespace Yafc.Widgets {
     public abstract class DataColumn<TData> {
         public readonly float minWidth;
         public readonly float maxWidth;

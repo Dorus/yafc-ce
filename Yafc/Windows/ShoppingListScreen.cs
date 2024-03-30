@@ -4,8 +4,9 @@ using System.Numerics;
 using Yafc.Blueprints;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
 
-namespace Yafc {
+namespace Yafc.Windows {
     public class ShoppingListScreen : PseudoScreen {
         private static readonly ShoppingListScreen Instance = new ShoppingListScreen();
 

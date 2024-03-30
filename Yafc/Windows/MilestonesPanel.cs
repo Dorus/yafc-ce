@@ -1,8 +1,9 @@
 ﻿using System.Numerics;
 using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
 
-namespace Yafc {
+namespace Yafc.Windows {
     public class MilestonesWidget : VirtualScrollList<FactorioObject> {
         public static readonly MilestonesWidget Instance = new MilestonesWidget();
 

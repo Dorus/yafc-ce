@@ -1,7 +1,8 @@
 ﻿using Yafc.Model;
 using Yafc.Ui;
+using Yafc.Widgets;
 
-namespace Yafc {
+namespace Yafc.Windows {
     public class ErrorListPanel : PseudoScreen {
         private static readonly ErrorListPanel Instance = new ErrorListPanel();
         private ErrorCollector collector;

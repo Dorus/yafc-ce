@@ -4,7 +4,7 @@ using SDL2;
 using Yafc.Model;
 using Yafc.Ui;
 
-namespace Yafc {
+namespace Yafc.Workspace {
     public abstract class ProjectPageView : Scrollable {
         protected ProjectPageView() : base(true, true, false) {
             headerContent = new ImGui(BuildHeader, default, RectAllocator.LeftAlign);
@@ -66,7 +66,7 @@ namespace Yafc {
             }
 
             // use bottom padding to enable scrolling past the last row
-            base.Build(gui, visibleSize.Y - headerHeight, true);
+            Build(gui, visibleSize.Y - headerHeight, true);
         }
 
         protected override Vector2 MeasureContent(Rect rect, ImGui gui) {

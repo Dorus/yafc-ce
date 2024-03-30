@@ -2,8 +2,9 @@
 using System.Numerics;
 using SDL2;
 using Yafc.Ui;
+using Yafc.Windows;
 
-namespace Yafc {
+namespace Yafc.Widgets {
     // Pseudo screen is not an actual screen, it is a panel shown in the middle of the main screen
     public abstract class PseudoScreen : IKeyboardFocus {
         public readonly ImGui contents;
