@@ -1,7 +1,7 @@
 ﻿using System;
-using YAFC;
-using YAFC.Model;
-using YAFC.Parser;
+using Yafc;
+using Yafc.Model;
+using Yafc.Parser;
 
 namespace CommandLineToolExample {
     // If you wish to embed yafc or make a command-line tool using YAFC, here is an example on how to do that
