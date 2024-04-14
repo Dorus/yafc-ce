@@ -255,7 +255,15 @@ namespace Yafc.Model {
                 return null;
             }
 
-            Type type = Type.GetType(reader.GetString());
+            string typeName = reader.GetString();
+            // For backwards compatibility, convert namespace.
+            // This is slighly ugly: We depend on the project to be parsed already at this point.
+            // For safety, attempt to apply conversion if version is not found.
+            if ((context.Project?.yafcVersion is null || new Version(context.Project.yafcVersion) <= new Version(0, 6, 2, 0))
+                && typeName.StartsWith("YAFC.Model")) {
+                typeName = "Yafc.Model" + typeName.Substring("YAFC.Model".Length);
+            }
+            Type type = Type.GetType(typeName);
             if (type == null) {
                 context.Error("Type " + s + " does not exist. Possible plugin version change", ErrorSeverity.MinorDataLoss);
             }

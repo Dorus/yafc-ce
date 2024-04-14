@@ -331,12 +331,17 @@ namespace Yafc.Model {
     public class DeserializationContext {
         private readonly List<ModelObject> allObjects = new List<ModelObject>();
         private readonly ErrorCollector collector;
+        public Project Project { get; private set; }
 
         public DeserializationContext(ErrorCollector errorCollector) {
             collector = errorCollector;
         }
 
         public void Add(ModelObject obj) {
+            // Store the Project so we can check the Yafc version for backwards compatibility
+            if (obj is Project p) {
+                Project = p;
+            }
             allObjects.Add(obj);
         }
 
