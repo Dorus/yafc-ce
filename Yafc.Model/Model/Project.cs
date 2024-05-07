@@ -188,6 +188,7 @@ namespace Yafc.Model {
         public int time { get; set; } = 1;
         public float itemUnit { get; set; }
         public float fluidUnit { get; set; }
+        public bool PolutionCost { get; set; } = true;
         public ProjectPreferences(Project owner) : base(owner) { }
         public EntityBelt defaultBelt { get; set; }
         public EntityInserter defaultInserter { get; set; }

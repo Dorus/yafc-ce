@@ -223,7 +223,7 @@ namespace Yafc.Model {
                     logisticsCost *= miningPenalty;
                 }
 
-                if (minEmissions >= 0f) {
+                if (minEmissions >= 0f && project.preferences.PolutionCost) {
                     logisticsCost += minEmissions * CostPerPollution * recipe.time;
                 }
 

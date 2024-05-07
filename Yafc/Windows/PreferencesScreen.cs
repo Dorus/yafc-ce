@@ -38,6 +38,12 @@ namespace Yafc {
             gui.BuildText("Fluid production/consumption:", Font.subheader);
             BuildUnitPerTime(gui, true, prefs);
 
+            gui.BuildCheckBox("Include polution in cost calculation", prefs.PolutionCost, out var PolutionCost);
+            if (prefs.PolutionCost != PolutionCost) {
+                prefs.PolutionCost = PolutionCost;
+                // TODO: recalculate cost analyse
+            }
+
             ChoiceObject(gui, "Default belt:", Database.allBelts, prefs.defaultBelt, s => {
                 prefs.RecordUndo().defaultBelt = s;
                 gui.Rebuild();
