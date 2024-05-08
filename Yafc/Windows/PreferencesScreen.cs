@@ -40,8 +40,7 @@ namespace Yafc {
 
             gui.BuildCheckBox("Include polution in cost calculation", prefs.PolutionCost, out var PolutionCost);
             if (prefs.PolutionCost != PolutionCost) {
-                prefs.PolutionCost = PolutionCost;
-                // TODO: recalculate cost analyse
+                prefs.RecordUndo().PolutionCost = PolutionCost;
             }
 
             ChoiceObject(gui, "Default belt:", Database.allBelts, prefs.defaultBelt, s => {

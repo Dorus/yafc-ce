@@ -87,6 +87,7 @@ namespace Yafc {
             SetActivePage(project.FindPage(project.displayPages[0]));
             project.metaInfoChanged += ProjectOnMetaInfoChanged;
             project.settings.changed += ProjectSettingsChanged;
+            project.preferences.changed += ProjectSettingsChanged;
             InputSystem.Instance.SetDefaultKeyboardFocus(this);
             summaryView.SetProject(project);
         }
