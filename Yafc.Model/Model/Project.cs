@@ -197,6 +197,7 @@ namespace Yafc.Model {
         public HashSet<FactorioObject> favorites { get; } = new HashSet<FactorioObject>();
         public Technology targetTechnology { get; set; }
 
+        public event Action<bool> changed;
         protected internal override void AfterDeserialize() {
             base.AfterDeserialize();
             defaultBelt ??= Database.allBelts.OrderBy(x => x.beltItemsPerSecond).FirstOrDefault();
@@ -248,6 +249,7 @@ namespace Yafc.Model {
         }
 
         protected internal override void ThisChanged(bool visualOnly) {
+            changed?.Invoke(visualOnly);
             // Don't propagate preferences changes to project
         }
 
