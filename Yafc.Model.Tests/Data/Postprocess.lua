@@ -1,0 +1,2 @@
+-- This file is run after all mods are loaded
+-- In case of breaking prototype changes, if YAFC is not updated, you may put data patching code here
